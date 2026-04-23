@@ -3,6 +3,7 @@ package persistencia;
 
 import java.io.*;
 import java.lang.reflect.Constructor;
+import java.util.ArrayList;
 import model.Registro;
 
 
@@ -198,6 +199,25 @@ public class Arquivo<T extends Registro> {
             endereco = proximo;
         }
         return -1;
+    }
+
+    public ArrayList<T> readAll() throws Exception {
+        ArrayList<T> lista = new ArrayList<>();
+        arquivo.seek(TAM_CABECALHO);
+
+        while (arquivo.getFilePointer() < arquivo.length()) {
+            byte lapide = arquivo.readByte();
+            short tamanho = arquivo.readShort();
+            byte[] dados = new byte[tamanho];
+            arquivo.read(dados);
+
+            if (lapide == ' ') {
+                T obj = construtor.newInstance();
+                obj.fromByteArray(dados);
+                lista.add(obj);
+            }
+        }
+        return lista;
     }
 
     public void close() throws Exception {

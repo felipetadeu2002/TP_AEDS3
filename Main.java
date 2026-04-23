@@ -1,13 +1,18 @@
 import dao.FilmeDAO;
+import dao.UsuarioDAO;
 import dao.EmprestimoDAO;
+import dao.UsuarioDAO;
 import java.util.Scanner;
 import model.Filme;
+import model.Usuario;
 import model.Emprestimo;
+
 
 public class Main {
     public static void main(String[] args) throws Exception {
         FilmeDAO filmeDAO = new FilmeDAO();
         EmprestimoDAO emprestimoDAO = new EmprestimoDAO();
+        UsuarioDAO usuarioDAO = new UsuarioDAO();
         Scanner sc = new Scanner(System.in);
 
         while (true) {
@@ -16,8 +21,9 @@ public class Main {
             System.out.println("2) Consultar Filme");
             System.out.println("3) Atualizar Filme");
             System.out.println("4) Excluir Filme");
-            System.out.println("5) Criar Empréstimo");
-            System.out.println("6) Listar Empréstimos de um Usuário");
+            System.out.println("5) Cadastrar Usuário");
+            System.out.println("6) Criar Empréstimo");
+            System.out.println("7) Listar Empréstimos de um Usuário");
             System.out.println("0) Sair");
             System.out.print("Escolha uma opção: ");
             
@@ -42,7 +48,7 @@ public class Main {
 
                     Filme f = new Filme(0, titulo, diretor, ano, duracao, generos, tags);
                     filmeDAO.create(f);
-                    System.out.println("Filme cadastrado com sucesso!");
+                    System.out.println("Filme cadastrado com sucesso! ID gerado: " + f.getId());
 
                 } else if (op == 2) { 
                     System.out.print("Digite o ID do Filme: ");
@@ -91,27 +97,41 @@ public class Main {
                     } else {
                         System.out.println("Não foi possível excluir (ID não encontrado).");
                     }
+                
+                // Usuario
+                } else if (op == 5) {
+                    System.out.print("Nome: ");
+                    String nome = sc.nextLine();
+                    System.out.print("Email: ");
+                    String email = sc.nextLine();
+                    System.out.print("Telefone: ");
+                    String telefone = sc.nextLine();
+                    System.out.print("CPF: ");
+                    String cpf = sc.nextLine();
+                    Usuario u = new Usuario(0, nome, email, telefone, cpf);
+                    usuarioDAO.create(u);
+                    System.out.println("Usuário cadastrado com sucesso! ID gerado: " + u.getId());
 
                 // Emprestimo
-                } else if (op == 5) {
-                    System.out.print("ID do Usuario: ");
-                    int idUsuario = Integer.parseInt(sc.nextLine());
-                    System.out.print("ID do Filme: ");
-                    int idFilme = Integer.parseInt(sc.nextLine());
-                    System.out.print("ID do Funcionario: ");
-                    int idFuncionario = Integer.parseInt(sc.nextLine());
-                    Emprestimo e = new Emprestimo(
-                            idUsuario,
-                            idFilme,
-                            idFuncionario,
-                            System.currentTimeMillis(),
-                            0,
-                            "ABERTO"
-                    );
-                    emprestimoDAO.create(e);
-                    System.out.println("Empréstimo criado com sucesso!");
-
                 } else if (op == 6) {
+                    System.out.print("CPF do Usuario: ");
+                    String cpf = sc.nextLine();
+                    Usuario usuario = usuarioDAO.buscarPorCpf(cpf);
+
+                    if (usuario == null) {
+                        System.out.println("Usuário não encontrado.");
+                    } else {
+                        System.out.println("Usuário encontrado: " + usuario.getNome());
+                        System.out.print("ID do Filme: ");
+                        int idFilme = Integer.parseInt(sc.nextLine());
+                        System.out.print("ID do Funcionario: ");
+                        int idFuncionario = Integer.parseInt(sc.nextLine());
+                        Emprestimo e = new Emprestimo(usuario.getId(), idFilme, idFuncionario, System.currentTimeMillis(), 0, "ABERTO" );
+                        emprestimoDAO.create(e);
+                        System.out.println("Empréstimo criado com sucesso!");
+                    }
+
+                } else if (op == 7) {
                     System.out.print("ID do Usuario: ");
                     int idUsuario = Integer.parseInt(sc.nextLine());
 
