@@ -268,6 +268,6 @@ backup_huffman.bin
 
 # Disciplina
 
-Algoritmos e Estruturas de Dados III (AED III)
+Algoritmos e Estruturas de Dados III (AEDS III)
 
 Pontifícia Universidade Católica de Minas Gerais – PUC Minas
