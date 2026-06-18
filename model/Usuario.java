@@ -1,6 +1,7 @@
 package model;
 
 import java.io.*;
+import seguranca.XORCipher;
 
 public class Usuario implements Registro {
     private int id;
@@ -34,11 +35,12 @@ public class Usuario implements Registro {
         da.writeUTF(nome == null ? "" : nome);
         da.writeUTF(email == null ? "" : email);
         da.writeUTF(telefone == null ? "" : telefone);
-        da.writeUTF(cpf == null ? "" : cpf);
+        String cpfCriptografado = XORCipher.encrypt(cpf == null ? "" : cpf);
+        da.writeUTF(cpfCriptografado);
         return ba.toByteArray();
     }
 
-    @Override
+   @Override
     public void fromByteArray(byte[] ba) throws IOException {
         ByteArrayInputStream bi = new ByteArrayInputStream(ba);
         DataInputStream di = new DataInputStream(bi);
@@ -46,7 +48,8 @@ public class Usuario implements Registro {
         nome = di.readUTF();
         email = di.readUTF();
         telefone = di.readUTF();
-        cpf = di.readUTF();
+        String cpfCriptografado = di.readUTF();
+        cpf = XORCipher.decrypt(cpfCriptografado);
     }
 
     @Override

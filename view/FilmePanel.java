@@ -19,7 +19,9 @@ public class FilmePanel extends JPanel {
     private final JTextField fGeneros   = new JTextField();
     private final JTextField fTags      = new JTextField();
     private final JTextField fBuscarId  = new JTextField();
-
+    private final JTextField fPadraoPesquisa = new JTextField();
+    private final JRadioButton rbKMP = new JRadioButton("KMP", true);
+    private final JRadioButton rbBM = new JRadioButton("Boyer-Moore");
     private final DefaultTableModel tableModel;
     private final JTable tabela;
     private int idSelecionado = -1;
@@ -52,6 +54,26 @@ public class FilmePanel extends JPanel {
         g.gridx = 1; g.weightx = 1;
         form.add(fBuscarId, g);
 
+        // Pesquisa por padrão
+        g.gridx = 0;
+        g.gridy = labels.length + 2;
+        g.weightx = 0;
+        form.add(  new JLabel("Padrão:"), g);
+        g.gridx = 1;
+        g.weightx = 1;
+        form.add(fPadraoPesquisa, g);
+
+        ButtonGroup grupo = new ButtonGroup();
+        grupo.add(rbKMP);
+        grupo.add(rbBM);
+
+        JPanel painelBusca = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        painelBusca.add(rbKMP);
+        painelBusca.add(rbBM);
+        g.gridx = 1;
+        g.gridy = labels.length + 3;
+        form.add(painelBusca, g);
+
         // ── Botões ────────────────────────────────────────────────
         JPanel btns = new JPanel(new FlowLayout(FlowLayout.LEFT, 6, 0));
         JButton bSalvar   = botao("Salvar",   new Color(46, 125, 50));
@@ -60,9 +82,10 @@ public class FilmePanel extends JPanel {
         JButton bBuscar   = botao("Buscar ID", new Color(74, 20, 140));
         JButton bLimpar   = botao("Limpar",   new Color(84, 84, 84));
         JButton bListar   = botao("Listar Ordenado (B+)", new Color(0, 96, 100));
+        JButton bPesquisar = botao("Pesquisar", new Color(255, 140, 0));
 
         btns.add(bSalvar); btns.add(bAtualizar); btns.add(bExcluir);
-        btns.add(bBuscar); btns.add(bLimpar);    btns.add(bListar);
+        btns.add(bBuscar); btns.add(bPesquisar); btns.add(bLimpar); btns.add(bListar);
 
         g.gridx = 0; g.gridy = labels.length + 1; g.gridwidth = 2; g.weightx = 1;
         form.add(btns, g);
@@ -91,6 +114,7 @@ public class FilmePanel extends JPanel {
         bBuscar.addActionListener(e -> buscarPorId());
         bLimpar.addActionListener(e -> limpar());
         bListar.addActionListener(e -> listarOrdenado());
+        bPesquisar.addActionListener(e -> pesquisarPadrao());
 
         carregarTabela();
     }
@@ -212,6 +236,38 @@ public class FilmePanel extends JPanel {
     private int parseInt(JTextField f, int def) {
         try { return Integer.parseInt(f.getText().trim()); }
         catch (NumberFormatException e) { return def; }
+    }
+
+    private void pesquisarPadrao() {
+        try {
+            String padrao = fPadraoPesquisa.getText().trim();
+
+            if (padrao.isEmpty()) {
+                aviso("Informe um padrão.");
+            return;
+            }
+
+            ArrayList<Filme> filmes;
+
+            if (rbKMP.isSelected()) {
+                filmes = dao.pesquisarKMP(padrao);
+            } else {
+            filmes = dao.pesquisarBM(padrao);
+            }
+
+            tableModel.setRowCount(0);
+
+            for (Filme f : filmes) {
+            addRow(f);
+            }
+
+            if (filmes.isEmpty()) {
+            aviso("Nenhum filme encontrado.");
+            }
+
+        } catch (Exception ex) {
+            erro(ex);
+        }
     }
 
     private String str(Object o) { return o == null ? "" : o.toString(); }

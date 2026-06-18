@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import model.Filme;
 import persistencia.Arquivo;
 import persistencia.ArvoreBMais;
+import busca.KMP;
+import busca.BoyerMoore;
 
 public class FilmeDAO {
    private Arquivo<Filme> arquivo;
@@ -65,5 +67,57 @@ public class FilmeDAO {
 
    private String chaveTitulo(Filme filme) {
       return filme.getId() + "|" + filme.getTitulo().toLowerCase();
+   }
+
+   public ArrayList<Filme> pesquisarKMP(String padrao)
+        throws Exception {
+
+    ArrayList<Filme> encontrados =
+        new ArrayList<>();
+
+    ArrayList<Filme> filmes =
+        listarFilmesOrdenadosPorTitulo();
+
+    for (Filme filme : filmes) {
+
+        String titulo =
+            filme.getTitulo().toLowerCase();
+
+        if (!KMP.buscar(
+                titulo,
+                padrao.toLowerCase()
+            ).isEmpty()) {
+
+            encontrados.add(filme);
+        }
+    }
+
+    return encontrados;
+}
+
+public ArrayList<Filme> pesquisarBM(String padrao)
+        throws Exception {
+
+    ArrayList<Filme> encontrados =
+        new ArrayList<>();
+
+    ArrayList<Filme> filmes =
+        listarFilmesOrdenadosPorTitulo();
+
+    for (Filme filme : filmes) {
+
+        String titulo =
+            filme.getTitulo().toLowerCase();
+
+        if (!BoyerMoore.buscar(
+                titulo,
+                padrao.toLowerCase()
+            ).isEmpty()) {
+
+            encontrados.add(filme);
+        }
+    }
+
+    return encontrados;
    }
 }
