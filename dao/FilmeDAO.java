@@ -69,55 +69,27 @@ public class FilmeDAO {
       return filme.getId() + "|" + filme.getTitulo().toLowerCase();
    }
 
-   public ArrayList<Filme> pesquisarKMP(String padrao)
-        throws Exception {
-
-    ArrayList<Filme> encontrados =
-        new ArrayList<>();
-
-    ArrayList<Filme> filmes =
-        listarFilmesOrdenadosPorTitulo();
-
-    for (Filme filme : filmes) {
-
-        String titulo =
-            filme.getTitulo().toLowerCase();
-
-        if (!KMP.buscar(
-                titulo,
-                padrao.toLowerCase()
-            ).isEmpty()) {
-
+   public ArrayList<Filme> pesquisarKMP(String padrao) throws Exception {
+      ArrayList<Filme> encontrados = new ArrayList<>();
+      ArrayList<Filme> filmes = listarFilmesOrdenadosPorTitulo();
+      for (Filme filme : filmes) {
+         String titulo = filme.getTitulo().toLowerCase();
+         if (!KMP.buscar(titulo, padrao.toLowerCase()).isEmpty()) {
             encontrados.add(filme);
         }
-    }
-
+      }
     return encontrados;
-}
+   }
 
-public ArrayList<Filme> pesquisarBM(String padrao)
-        throws Exception {
-
-    ArrayList<Filme> encontrados =
-        new ArrayList<>();
-
-    ArrayList<Filme> filmes =
-        listarFilmesOrdenadosPorTitulo();
-
-    for (Filme filme : filmes) {
-
-        String titulo =
-            filme.getTitulo().toLowerCase();
-
-        if (!BoyerMoore.buscar(
-                titulo,
-                padrao.toLowerCase()
-            ).isEmpty()) {
-
+   public ArrayList<Filme> pesquisarBM(String padrao)throws Exception {
+      ArrayList<Filme> encontrados = new ArrayList<>();
+      ArrayList<Filme> filmes = listarFilmesOrdenadosPorTitulo();
+      for (Filme filme : filmes) {
+         String titulo = filme.getTitulo().toLowerCase();
+         if (!BoyerMoore.buscar(titulo, padrao.toLowerCase()).isEmpty()) {
             encontrados.add(filme);
-        }
-    }
-
+         }
+      }
     return encontrados;
    }
 }

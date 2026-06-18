@@ -88,7 +88,7 @@ public class FilmePanel extends JPanel {
         btns.add(bBuscar); btns.add(bPesquisar); btns.add(bLimpar); btns.add(bListar);
 
         g.gridx = 0; g.gridy = labels.length + 1; g.gridwidth = 2; g.weightx = 1;
-        form.add(btns, g);
+        form.add(btns, g); g.gridwidth = 1;
 
         // ── Tabela ────────────────────────────────────────────────
         tableModel = new DefaultTableModel(
@@ -104,7 +104,7 @@ public class FilmePanel extends JPanel {
 
         JSplitPane split = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
             form, new JScrollPane(tabela));
-        split.setResizeWeight(0.45);
+        split.setResizeWeight(0.70);
         add(split, BorderLayout.CENTER);
 
         // ── Ações ─────────────────────────────────────────────────
