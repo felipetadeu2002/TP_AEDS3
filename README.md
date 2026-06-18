@@ -1,6 +1,6 @@
 # Sistema de Biblioteca de Filmes
 
-Trabalho Prático de Algoritmos e Estruturas de Dados III (AED III) – PUC Minas
+Trabalho Prático de Algoritmos e Estruturas de Dados III (AEDS III) – PUC Minas
 
 ---
 
