@@ -16,8 +16,7 @@ public class Emprestimo implements Registro {
 
     public Emprestimo() {}
 
-    public Emprestimo(int idUsuario, int idFilme, int idFuncionario,
-                      long dataEmprestimo, long dataDevolucaoPrevista, String status) {
+    public Emprestimo(int idUsuario, int idFilme, int idFuncionario, long dataEmprestimo, long dataDevolucaoPrevista, String status) {
         this.idUsuario = idUsuario;
         this.idFilme = idFilme;
         this.idFuncionario = idFuncionario;

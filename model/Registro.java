@@ -1,7 +1,6 @@
 package model;
 
-public interface Registro 
-{
+public interface Registro {
   public int getId();
   public void setId(int id);
 
